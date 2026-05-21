@@ -1,0 +1,13 @@
+2026-05-20 13:26:42,936 [INFO] app: Created mock users: C:\Users\Labcrie\Desktop\ProjetosPreamar\formPescador\mock_data\users.xlsx
+2026-05-20 13:26:43,001 [INFO] app: Created mock fishermen data: C:\Users\Labcrie\Desktop\ProjetosPreamar\formPescador\mock_data\fishermen_mock_data.xlsx
+2026-05-20 13:26:43,164 [INFO] app: Seeded database: created=30 skipped=0
+2026-05-20 13:27:07,678 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-20 13:27:26,340 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-20 13:28:03,517 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-21 10:14:05,345 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-21 10:14:06,876 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-21 10:14:13,293 [INFO] app: 404 Not Found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+2026-05-21 10:25:05,842 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-21 10:25:11,902 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-21 10:25:16,905 [INFO] app: Seeded database: created=0 skipped=30
+2026-05-21 10:28:00,560 [INFO] app: Seeded database: created=0 skipped=30

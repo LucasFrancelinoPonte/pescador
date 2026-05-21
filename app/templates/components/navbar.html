@@ -1,0 +1,18 @@
+<nav class="navbar navbar-expand navbar-app sticky-top">
+  <div class="container py-2">
+    <a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" href="{{ url_for('main.home') }}">
+      <span class="brand-mark">FP</span>
+      <span>Form Pescador</span>
+    </a>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      {% if current_user.is_authenticated %}
+        <form method="post" action="{{ url_for('auth.logout') }}" class="d-inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-outline-secondary btn-sm px-3">Sair</button>
+        </form>
+      {% else %}
+        <a class="btn btn-outline-secondary btn-sm px-3" href="{{ url_for('auth.login') }}">Entrar</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

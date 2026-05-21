@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% from "components/macros.html" import page_header, stat_card %}
+
+{% block title %}Dashboard | Form Pescador{% endblock %}
+
+{% block content %}
+<div class="row g-4 align-items-start">
+  <div class="col-lg-3">
+    {% include "components/sidebar.html" with context %}
+  </div>
+
+  <div class="col-lg-9">
+    <section class="page-card p-4 p-md-5">
+      {{ page_header('Dashboard administrativo', 'Visão geral dos formulários', 'Indicadores, gráficos e registros recentes em um layout claro e consistente.', 'Voltar para a home', url_for('main.home'), 'bi-arrow-left') }}
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">{{ stat_card('bi-journal-text', 'Formulários totais', data.total_forms) }}</div>
+        <div class="col-md-3">{{ stat_card('bi-currency-dollar', 'Renda média', 'R$ ' ~ '%.2f'|format(data.average_income), 'success') }}</div>
+        <div class="col-md-3">{{ stat_card('bi-geo-alt', 'Municípios com registros', data.by_municipio|length, 'warning') }}</div>
+        <div class="col-md-3">{{ stat_card('bi-pie-chart', 'Categorias de pesca', data.by_pesca_category|length, 'info') }}</div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+          <div class="card card-soft border-0 h-100">
+            <div class="card-body p-4 p-md-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title mb-0">Quantidade por município</h2>
+                <span class="badge text-bg-light text-secondary border">Bar chart</span>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="municipalityChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="card card-soft border-0 h-100">
+            <div class="card-body p-4 p-md-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title mb-0">Sexo</h2>
+                <span class="badge text-bg-light text-secondary border">Pie chart</span>
+              </div>
+              <div class="chart-wrap chart-wrap-sm">
+                <canvas id="sexChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card card-soft border-0 h-100">
+            <div class="card-body p-4 p-md-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title mb-0">Quantidade por categoria de pesca</h2>
+                <span class="badge text-bg-light text-secondary border">Bar chart</span>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card card-soft border-0 h-100">
+            <div class="card-body p-4 p-md-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title mb-0">Indicadores principais</h2>
+                <span class="badge text-bg-light text-secondary border">Resumo</span>
+              </div>
+              <div class="list-group list-group-flush">
+                {% for item in data.by_municipio[:5] %}
+                  <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <span>{{ item.label }}</span>
+                    <span class="badge text-bg-primary-subtle text-primary border">{{ item.value }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-soft border-0 mt-4">
+        <div class="card-body p-4 p-md-5">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="section-title mb-0">Registros recentes</h2>
+            <span class="badge text-bg-light text-secondary border">Paginação</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle app-table mb-0">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Nome</th>
+                  <th>Município</th>
+                  <th>Categoria</th>
+                  <th>Sexo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in data.recent_submissions.items %}
+                  <tr>
+                    <td>{{ item.created_at.strftime('%d/%m/%Y %H:%M') if item.created_at else '-' }}</td>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.municipio }}</td>
+                    <td>{{ item.atividade_principal }}</td>
+                    <td>{{ item.sexo }}</td>
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td colspan="5" class="text-center text-secondary py-4">Nenhum registro encontrado.</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          {% if data.recent_submissions.pages > 1 %}
+            <nav class="mt-4">
+              <ul class="pagination justify-content-end mb-0">
+                <li class="page-item {% if data.recent_submissions.page <= 1 %}disabled{% endif %}">
+                  <a class="page-link" href="{{ url_for('dashboard_bp.dashboard', page=data.recent_submissions.page - 1) }}">Anterior</a>
+                </li>
+                <li class="page-item disabled">
+                  <span class="page-link">Página {{ data.recent_submissions.page }} de {{ data.recent_submissions.pages }}</span>
+                </li>
+                <li class="page-item {% if data.recent_submissions.page >= data.recent_submissions.pages %}disabled{% endif %}">
+                  <a class="page-link" href="{{ url_for('dashboard_bp.dashboard', page=data.recent_submissions.page + 1) }}">Próxima</a>
+                </li>
+              </ul>
+            </nav>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+  const municipalityLabels = {{ municipality_labels | safe }};
+  const municipalityValues = {{ municipality_values | safe }};
+  const categoryLabels = {{ category_labels | safe }};
+  const categoryValues = {{ category_values | safe }};
+  const sexLabels = {{ sexo_labels | safe }};
+  const sexValues = {{ sexo_values | safe }};
+
+  const palette = ['#0d6efd', '#20c997', '#ffc107', '#dc3545', '#6610f2', '#6f42c1', '#198754', '#0dcaf0'];
+
+  function buildBarChart(canvasId, labels, values, label) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label,
+          data: values,
+          backgroundColor: palette.slice(0, labels.length),
+          borderRadius: 10,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { precision: 0 } },
+        },
+      },
+    });
+  }
+
+  function buildPieChart(canvasId, labels, values) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    new Chart(canvas, {
+      type: 'pie',
+      data: {
+        labels,
+        datasets: [{
+          data: values,
+          backgroundColor: palette.slice(0, labels.length),
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } },
+      },
+    });
+  }
+
+  buildBarChart('municipalityChart', municipalityLabels, municipalityValues, 'Formulários por município');
+  buildBarChart('categoryChart', categoryLabels, categoryValues, 'Formulários por categoria');
+  buildPieChart('sexChart', sexLabels, sexValues);
+</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar | Form Pescador{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+    <section class="auth-card p-4 p-md-5">
+      <div class="mb-4">
+        <div class="section-kicker mb-2">Acesso</div>
+        <h1 class="auth-title mb-2">Entrar</h1>
+        <p class="text-secondary mb-0">Use suas credenciais para abrir o formulário.</p>
+      </div>
+
+      <form method="post" action="{{ url_for('auth.login', next=request.args.get('next')) }}" class="vstack gap-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+
+        <div>
+          <label for="email" class="form-label fw-semibold">E-mail</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="voce@exemplo.com" required>
+        </div>
+
+        <div>
+          <label for="password" class="form-label fw-semibold">Senha</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

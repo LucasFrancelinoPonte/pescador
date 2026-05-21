@@ -1,0 +1,495 @@
+{% extends "base.html" %}
+
+{% block title %}Wizard socioeconômico | Form Pescador{% endblock %}
+
+{% block extra_head %}
+  <link href="{{ url_for('static', filename='css/form.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% set sexo_options = [('M', 'Masculino'), ('F', 'Feminino')] %}
+{% set local_moradia_options = [('comunidade_tradicional', 'Comunidade tradicional'), ('sede_municipal', 'Sede municipal'), ('outro', 'Outro')] %}
+{% set construcao_options = [('alvenaria', 'Alvenaria'), ('madeira', 'Madeira'), ('outro', 'Outro')] %}
+{% set carteira_options = [('grande_marinha', 'Grande marinha'), ('pequena_colonia', 'Pequena colônia')] %}
+{% set categoria_options = [('armador', 'Armador'), ('pescador_artesanal', 'Pescador artesanal'), ('pescador_industrial', 'Pescador industrial')] %}
+{% set status_embarcacao_options = [('financiada', 'Financiada'), ('quitada', 'Quitada')] %}
+{% set material_casco_options = [('madeira', 'Madeira'), ('fibra', 'Fibra')] %}
+{% set frequencia_options = [('diaria', 'Diária'), ('semanal', 'Semanal'), ('mensal', 'Mensal'), ('anual', 'Anual')] %}
+{% set relacao_trabalho_options = [('familiar', 'Familiar'), ('vizinhos_amigos', 'Vizinhos/amigos'), ('armador', 'Armador'), ('embarcado', 'Embarcado'), ('assalariado', 'Assalariado')] %}
+{% set propulsao_options = [('vela', 'Vela'), ('motor', 'Motor'), ('remo', 'Remo'), ('vara', 'Vara'), ('rabeta', 'Rabeta')] %}
+
+{% block content %}
+<div class="wizard-shell">
+  <section class="wizard-hero page-card p-4 p-lg-5 mb-4">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-8">
+        <span class="badge text-bg-light text-secondary border mb-3">Sistema de coleta socioeconômica</span>
+        <h1 class="wizard-title mb-3">Formulário multi-step para pescadores</h1>
+        <p class="wizard-subtitle mb-4">
+          Interface completa em Bootstrap 5 para validar experiência, responsividade e navegação antes da integração com backend.
+        </p>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="wizard-chip"><i class="bi bi-phone"></i> Mobile-first</span>
+          <span class="wizard-chip"><i class="bi bi-shield-check"></i> Sem persistência agora</span>
+          <span class="wizard-chip"><i class="bi bi-ui-checks-grid"></i> 9 etapas guiadas</span>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="wizard-hero-panel p-4 h-100">
+          <div class="small text-secondary mb-2">Status do protótipo</div>
+          <div class="wizard-hero-value">Pronto para testes visuais</div>
+          <div class="text-secondary mt-2">Validação real será implementada futuramente no backend.</div>
+          <div class="d-grid gap-2 mt-4">
+            <button type="button" class="btn btn-primary" data-wizard-fill-example>
+              <i class="bi bi-magic me-1"></i>Preencher exemplo
+            </button>
+            <a href="{{ url_for('main.home') }}" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left me-1"></i>Voltar ao início
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wizard-progress-card page-card p-3 p-lg-4 mb-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 mb-3">
+      <div>
+        <div class="section-kicker">Navegação</div>
+        <h2 class="section-title mb-1">Etapas do formulário</h2>
+        <p class="text-secondary mb-0">Avance livremente entre etapas. Nenhum campo bloqueia a navegação nesta versão.</p>
+      </div>
+      <div class="align-self-lg-center text-secondary small" data-wizard-progress-label>Etapa 1 de 9</div>
+    </div>
+    <div class="progress wizard-progress-track mb-4" role="progressbar" aria-label="Progresso do formulário">
+      <div class="progress-bar wizard-progress-bar" data-wizard-progress style="width: 11.11%"></div>
+    </div>
+    <div class="wizard-stepper" role="tablist" aria-label="Etapas do formulário">
+      <button type="button" class="wizard-step-pill is-active" data-step-button data-step-target="0"><span>01</span><small>Coleta</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="1"><span>02</span><small>Pessoais</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="2"><span>03</span><small>Saúde</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="3"><span>04</span><small>Atividade</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="4"><span>05</span><small>Produção</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="5"><span>06</span><small>Embarcação</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="6"><span>07</span><small>Despesas</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="7"><span>08</span><small>Safra</small></button>
+      <button type="button" class="wizard-step-pill" data-step-button data-step-target="8"><span>09</span><small>Revisão</small></button>
+    </div>
+  </section>
+
+  <form id="coletaWizard" class="wizard-form" data-wizard-form novalidate>
+    <div class="wizard-stage">
+      <section class="wizard-step-pane is-active" data-step-pane data-step-index="0">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">1. Informações da Coleta</div>
+              <h2 class="section-title mb-2">Contexto da coleta e responsáveis</h2>
+              <p class="text-secondary mb-0">Organize a origem do registro e o fluxo de digitação para auditoria futura.</p>
+            </div>
+            <span class="wizard-step-badge">Etapa 01</span>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="codigo_coleta" name="codigo_coleta" placeholder="CLT-2026-001" data-simulate-field><label for="codigo_coleta">Código da coleta</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="codigo_foto" name="codigo_foto" placeholder="IMG-0001" data-simulate-field><label for="codigo_foto">Código foto</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="municipio" name="municipio" data-simulate-field><option value="">Selecione</option><option>Bragança</option><option>Viseu</option><option>Quatipuru</option></select><label for="municipio">Município</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control wizard-input" id="localidade" name="localidade" placeholder="Comunidade, praia ou vila" data-simulate-field><label for="localidade">Localidade</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><select class="form-select wizard-select" id="coletor" name="coletor" data-simulate-field><option value="">Selecione</option><option>Ana Souza</option><option>Bruno Lima</option><option>Carla Mendes</option></select><label for="coletor">Coletor</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="date" class="form-control wizard-input" id="data_coleta" name="data_coleta" placeholder="" data-simulate-field><label for="data_coleta">Data coleta</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="digitador" name="digitador" data-simulate-field><option value="">Selecione</option><option>Diego Alves</option><option>Fernanda Rocha</option><option>Gabriel Nunes</option></select><label for="digitador">Digitador</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="date" class="form-control wizard-input" id="data_digitacao" name="data_digitacao" placeholder="" data-simulate-field><label for="data_digitacao">Data digitação</label></div></div>
+            <div class="col-12"><div class="form-floating"><textarea class="form-control wizard-textarea" id="observacoes" name="observacoes" placeholder=" " rows="4" data-autoresize data-simulate-field></textarea><label for="observacoes">Observações</label></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="1">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">2. Dados Pessoais</div>
+              <h2 class="section-title mb-2">Perfil do pescador</h2>
+              <p class="text-secondary mb-0">Estrutura visual para identidade, contexto domiciliar e escolaridade.</p>
+            </div>
+            <span class="wizard-step-badge">Etapa 02</span>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-lg-6"><div class="form-floating"><input type="text" class="form-control wizard-input" id="nome" name="nome" placeholder="Nome completo" data-simulate-field><label for="nome">Nome</label></div></div>
+            <div class="col-lg-6"><div class="form-floating"><input type="text" class="form-control wizard-input" id="apelido" name="apelido" placeholder="Como a pessoa é conhecida" data-simulate-field><label for="apelido">Apelido</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="tel" class="form-control wizard-input" id="telefone" name="telefone" placeholder="(00) 00000-0000" inputmode="tel" data-mask="phone" data-simulate-field><label for="telefone">Telefone</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="sexo" name="sexo" data-simulate-field><option value="">Selecione</option>{% for value, label in sexo_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select><label for="sexo">Sexo</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="date" class="form-control wizard-input" id="data_nascimento" name="data_nascimento" placeholder="" data-simulate-field><label for="data_nascimento">Data nascimento</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="naturalidade" name="naturalidade" placeholder="Cidade/estado" data-simulate-field><label for="naturalidade">Naturalidade</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="estado_civil" name="estado_civil" placeholder="Casado(a), solteiro(a)..." data-simulate-field><label for="estado_civil">Estado civil</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="escolaridade" name="escolaridade" placeholder="Fundamental, médio..." data-simulate-field><label for="escolaridade">Escolaridade</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control wizard-input" id="atividade_principal_renda" name="atividade_principal_renda" placeholder="Pesca, agricultura, comércio..." data-simulate-field><label for="atividade_principal_renda">Atividade principal de renda</label></div></div>
+            <div class="col-md-6"><div class="form-floating"><input type="text" class="form-control wizard-input" id="atividade_secundaria_renda" name="atividade_secundaria_renda" placeholder="Atividade complementar" data-simulate-field><label for="atividade_secundaria_renda">Atividade secundária de renda</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="composicao_familiar" name="composicao_familiar" placeholder="0" min="0" step="1" inputmode="numeric" data-simulate-field><label for="composicao_familiar">Composição familiar</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="local_moradia" name="local_moradia" data-conditional-select="local_moradia_outro" data-simulate-field><option value="">Selecione</option>{% for value, label in local_moradia_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select><label for="local_moradia">Local moradia</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="tipo_construcao" name="tipo_construcao" data-conditional-select="tipo_construcao_outro" data-simulate-field><option value="">Selecione</option>{% for value, label in construcao_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select><label for="tipo_construcao">Tipo construção</label></div></div>
+            <div class="col-12"><div class="form-floating wizard-conditional d-none" id="local_moradia_outro_wrap"><input type="text" class="form-control wizard-input" id="local_moradia_outro" name="local_moradia_outro" placeholder="Especifique outra localidade"><label for="local_moradia_outro">Local moradia outro</label></div></div>
+            <div class="col-12"><div class="form-floating wizard-conditional d-none" id="tipo_construcao_outro_wrap"><input type="text" class="form-control wizard-input" id="tipo_construcao_outro" name="tipo_construcao_outro" placeholder="Especifique outro tipo"><label for="tipo_construcao_outro">Tipo construção outro</label></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="2">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">3. Saúde e Registros</div>
+              <h2 class="section-title mb-2">Condições de saúde e vínculos formais</h2>
+              <p class="text-secondary mb-0">Checkboxes, switches e campos condicionais para registros e carteiras.</p>
+            </div>
+            <span class="wizard-step-badge">Etapa 03</span>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-12">
+              <div class="wizard-block-label">Problemas relatados</div>
+              <div class="wizard-checkbox-grid">
+                <label class="wizard-check-card" for="problema_vista"><input id="problema_vista" class="form-check-input" type="checkbox" name="problema_vista" value="1"><span>Problema de vista</span></label>
+                <label class="wizard-check-card" for="problema_pele"><input id="problema_pele" class="form-check-input" type="checkbox" name="problema_pele" value="1"><span>Pele</span></label>
+                <label class="wizard-check-card" for="problema_coluna"><input id="problema_coluna" class="form-check-input" type="checkbox" name="problema_coluna" value="1"><span>Coluna</span></label>
+                <label class="wizard-check-card" for="problema_ginecologico"><input id="problema_ginecologico" class="form-check-input" type="checkbox" name="problema_ginecologico" value="1"><span>Ginecológico</span></label>
+              </div>
+            </div>
+            <div class="col-12"><div class="form-floating"><textarea class="form-control wizard-textarea" id="outros_problemas" name="outros_problemas" placeholder=" " rows="3" data-autoresize data-simulate-field></textarea><label for="outros_problemas">Outros problemas</label></div></div>
+
+            <div class="col-12">
+              <div class="wizard-block-label">Registros</div>
+              <div class="wizard-switch-grid">
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="registro_inss" name="registro_inss" data-conditional-switch><label class="form-check-label" for="registro_inss">Registro INSS</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="registro_colonia" name="registro_colonia" data-conditional-switch data-conditional-target="nome_colonia_wrap"><label class="form-check-label" for="registro_colonia">Registro colônia</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="registro_associacao" name="registro_associacao" data-conditional-switch data-conditional-target="nome_associacao_wrap"><label class="form-check-label" for="registro_associacao">Registro associação</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="possui_carteira_pescador" name="possui_carteira_pescador" data-conditional-switch data-conditional-target="tipo_carteira_wrap"><label class="form-check-label" for="possui_carteira_pescador">Possui carteira pescador</label></div>
+              </div>
+            </div>
+
+            <div class="col-md-6"><div class="form-floating wizard-conditional d-none" id="nome_colonia_wrap"><input type="text" class="form-control wizard-input" id="nome_colonia" name="nome_colonia" placeholder="Nome da colônia"><label for="nome_colonia">Nome colônia</label></div></div>
+            <div class="col-md-6"><div class="form-floating wizard-conditional d-none" id="nome_associacao_wrap"><input type="text" class="form-control wizard-input" id="nome_associacao" name="nome_associacao" placeholder="Nome da associação"><label for="nome_associacao">Nome associação</label></div></div>
+            <div class="col-md-6"><div class="form-floating wizard-conditional d-none" id="tipo_carteira_wrap"><select class="form-select wizard-select" id="tipo_carteira" name="tipo_carteira"><option value="">Selecione</option>{% for value, label in carteira_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select><label for="tipo_carteira">Tipo carteira</label></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="3">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">4. Atividade Pesqueira</div>
+              <h2 class="section-title mb-2">Rotina, petrechos e relações de trabalho</h2>
+              <p class="text-secondary mb-0">Estrutura para o cotidiano da pesca e a relação com o território.</p>
+            </div>
+            <span class="wizard-step-badge">Etapa 04</span>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="tempo_na_atividade" name="tempo_na_atividade" placeholder="Ex.: 15 anos" data-simulate-field><label for="tempo_na_atividade">Tempo atividade</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="horas_trabalho_dia" name="horas_trabalho_dia" placeholder="0" min="0" max="24" step="0.5" inputmode="decimal" data-simulate-field><label for="horas_trabalho_dia">Horas trabalho por dia</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="principais_fontes_renda_familiar" name="principais_fontes_renda_familiar" placeholder="Pesca, agricultura..." data-simulate-field><label for="principais_fontes_renda_familiar">Principais fontes de renda familiar</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="categoria_pesca" name="categoria_pesca" data-simulate-field><option value="">Selecione</option>{% for value, label in categoria_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select><label for="categoria_pesca">Categoria pesca</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="principal_pescaria_pescado" name="principal_pescaria_pescado" placeholder="Espécie principal" data-simulate-field><label for="principal_pescaria_pescado">Principal pescaria / pescado</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="petrecho_nome" name="petrecho_nome" placeholder="Rede, linha, armadilha..." data-simulate-field><label for="petrecho_nome">Petrecho nome</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><input type="number" class="form-control wizard-input" id="petrecho_tamanho_metros" name="petrecho_tamanho_metros" placeholder="0" step="0.1" min="0" inputmode="decimal" data-simulate-field><label for="petrecho_tamanho_metros">Petrecho tamanho metros</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><input type="number" class="form-control wizard-input" id="petrecho_tamanho_bracas" name="petrecho_tamanho_bracas" placeholder="0" step="0.1" min="0" inputmode="decimal" data-simulate-field><label for="petrecho_tamanho_bracas">Petrecho tamanho braças</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><input type="number" class="form-control wizard-input" id="petrecho_unidades" name="petrecho_unidades" placeholder="0" step="1" min="0" inputmode="numeric" data-simulate-field><label for="petrecho_unidades">Petrecho unidades</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><input type="text" class="form-control wizard-input" id="petrecho_material" name="petrecho_material" placeholder="Nylon, fio, madeira..." data-simulate-field><label for="petrecho_material">Petrecho material</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="tipo_iscas" name="tipo_iscas" placeholder="Isca viva, gelo, etc." data-simulate-field><label for="tipo_iscas">Tipo iscas</label></div></div>
+            <div class="col-md-8"><div class="form-floating"><textarea class="form-control wizard-textarea" id="processo_lancamento_recolhimento" name="processo_lancamento_recolhimento" placeholder=" " rows="3" data-autoresize data-simulate-field></textarea><label for="processo_lancamento_recolhimento">Processo lançamento / recolhimento</label></div></div>
+            <div class="col-12"><div class="form-floating"><textarea class="form-control wizard-textarea" id="quadrantes_mapa" name="quadrantes_mapa" placeholder=" " rows="3" data-autoresize data-simulate-field></textarea><label for="quadrantes_mapa">Quadrantes mapa</label></div></div>
+
+            <div class="col-12">
+              <div class="wizard-block-label">Relação de trabalho</div>
+              <div class="wizard-checkbox-grid two-columns">
+                {% for value, label in relacao_trabalho_options %}
+                  <label class="wizard-check-card" for="relacao_trabalho_{{ loop.index0 }}"><input id="relacao_trabalho_{{ loop.index0 }}" class="form-check-input" type="checkbox" name="relacao_trabalho[]" value="{{ value }}"><span>{{ label }}</span></label>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="4">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">5. Produção e Comercialização</div>
+              <h2 class="section-title mb-2">Volume, valores e percepção da pesca</h2>
+              <p class="text-secondary mb-0">Conjunto para sintetizar produção média, renda e mercado.</p>
+            </div>
+            <span class="wizard-step-badge">Etapa 05</span>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-3"><div class="form-floating"><input type="number" class="form-control wizard-input" id="media_dias_embarcado" name="media_dias_embarcado" placeholder="0" min="0" step="1" inputmode="numeric" data-simulate-field><label for="media_dias_embarcado">Média dias embarcado</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><input type="number" class="form-control wizard-input" id="viagens_por_mes" name="viagens_por_mes" placeholder="0" min="0" step="1" inputmode="numeric" data-simulate-field><label for="viagens_por_mes">Viagens por mês</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><input type="number" class="form-control wizard-input" id="producao_media_viagem_kg" name="producao_media_viagem_kg" placeholder="0" min="0" step="0.1" inputmode="decimal" data-simulate-field><label for="producao_media_viagem_kg">Produção média kg</label></div></div>
+            <div class="col-md-3"><div class="form-floating"><input type="number" class="form-control wizard-input" id="producao_media_viagem_unidades" name="producao_media_viagem_unidades" placeholder="0" min="0" step="1" inputmode="numeric" data-simulate-field><label for="producao_media_viagem_unidades">Produção média unidades</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="valor_medio_kg_primeira_qualidade" name="valor_medio_kg_primeira_qualidade" placeholder="0,00" min="0" step="0.01" inputmode="decimal" data-simulate-field><label for="valor_medio_kg_primeira_qualidade">Valor primeira qualidade</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="valor_medio_kg_segunda_qualidade" name="valor_medio_kg_segunda_qualidade" placeholder="0,00" min="0" step="0.01" inputmode="decimal" data-simulate-field><label for="valor_medio_kg_segunda_qualidade">Valor segunda qualidade</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="valor_medio_kg_terceira_qualidade" name="valor_medio_kg_terceira_qualidade" placeholder="0,00" min="0" step="0.01" inputmode="decimal" data-simulate-field><label for="valor_medio_kg_terceira_qualidade">Valor terceira qualidade</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="renda_media_mensal" name="renda_media_mensal" placeholder="0,00" min="0" step="0.01" inputmode="decimal" data-simulate-field><label for="renda_media_mensal">Renda mensal</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="renda_media_por_pescaria" name="renda_media_por_pescaria" placeholder="0,00" min="0" step="0.01" inputmode="decimal" data-simulate-field><label for="renda_media_por_pescaria">Renda por pescaria</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="conservacao_pescado" name="conservacao_pescado" placeholder="Gelo, sal, caixa térmica..." data-simulate-field><label for="conservacao_pescado">Conservação pescado</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="proprietario_petrechos" name="proprietario_petrechos" placeholder="Nome do proprietário" data-simulate-field><label for="proprietario_petrechos">Proprietário petrechos</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="percepcao_pesca_passado" name="percepcao_pesca_passado" placeholder="Melhor, igual, pior..." data-simulate-field><label for="percepcao_pesca_passado">Percepção pesca passado</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="percepcao_tamanho_volume_capturado" name="percepcao_tamanho_volume_capturado" placeholder="Maior, menor, estável..." data-simulate-field><label for="percepcao_tamanho_volume_capturado">Percepção tamanho/volume capturado</label></div></div>
+            <div class="col-12">
+              <div class="wizard-block-label">Atravessador e petrechos</div>
+              <div class="wizard-switch-grid three-columns">
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="petrechos_proprios" name="petrechos_proprios"><label class="form-check-label" for="petrechos_proprios">Petrechos próprios</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="entrega_atravessador" name="entrega_atravessador"><label class="form-check-label" for="entrega_atravessador">Entrega atravessador</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="divida_com_atravessador" name="divida_com_atravessador"><label class="form-check-label" for="divida_com_atravessador">Dívida atravessador</label></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="5">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">6. Embarcação</div>
+              <h2 class="section-title mb-2">Características da embarcação e licenças</h2>
+              <p class="text-secondary mb-0">Campos técnicos e administrativos com múltipla seleção de propulsão.</p>
+            </div>
+            <span class="wizard-step-badge">Etapa 06</span>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-12">
+              <div class="wizard-switch-grid three-columns">
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="pesca_embarcada" name="pesca_embarcada"><label class="form-check-label" for="pesca_embarcada">Pesca embarcada</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="embarcacao_propria" name="embarcacao_propria"><label class="form-check-label" for="embarcacao_propria">Embarcação própria</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="registro_capitania" name="registro_capitania"><label class="form-check-label" for="registro_capitania">Registro capitania</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="registro_rgp" name="registro_rgp"><label class="form-check-label" for="registro_rgp">Registro RGP</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="licenciamento_ibama" name="licenciamento_ibama"><label class="form-check-label" for="licenciamento_ibama">Licenciamento IBAMA</label></div>
+                <div class="form-check form-switch wizard-switch-card"><input class="form-check-input" type="checkbox" id="licenciamento_mpa" name="licenciamento_mpa"><label class="form-check-label" for="licenciamento_mpa">Licenciamento MPA</label></div>
+              </div>
+            </div>
+
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="status_financeiro" name="status_financeiro" data-simulate-field><option value="">Selecione</option>{% for value, label in status_embarcacao_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select><label for="status_financeiro">Status financeiro</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="nome_proprietario" name="nome_proprietario" placeholder="Nome do proprietário" data-simulate-field><label for="nome_proprietario">Nome proprietário</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="apelido_proprietario" name="apelido_proprietario" placeholder="Apelido do proprietário" data-simulate-field><label for="apelido_proprietario">Apelido proprietário</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="cilindros_hp" name="cilindros_hp" placeholder="Cilindros / HP" data-simulate-field><label for="cilindros_hp">Cilindros / HP</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="porto_origem" name="porto_origem" placeholder="Porto de origem" data-simulate-field><label for="porto_origem">Porto origem</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="porto_desembarque" name="porto_desembarque" placeholder="Porto de desembarque" data-simulate-field><label for="porto_desembarque">Porto desembarque</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="nome_embarcacao" name="nome_embarcacao" placeholder="Nome da embarcação" data-simulate-field><label for="nome_embarcacao">Nome embarcação</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="comprimento" name="comprimento" placeholder="0" min="0" step="0.1" inputmode="decimal" data-simulate-field><label for="comprimento">Comprimento</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="num_registro" name="num_registro" placeholder="Número de registro" data-simulate-field><label for="num_registro">Número registro</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="largura" name="largura" placeholder="0" min="0" step="0.1" inputmode="decimal" data-simulate-field><label for="largura">Largura</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="tonelada_bruta_ab" name="tonelada_bruta_ab" placeholder="0" min="0" step="0.1" inputmode="decimal" data-simulate-field><label for="tonelada_bruta_ab">Tonelada bruta</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="capacidade_tripulacao" name="capacidade_tripulacao" placeholder="0" min="0" step="1" inputmode="numeric" data-simulate-field><label for="capacidade_tripulacao">Capacidade tripulação</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="number" class="form-control wizard-input" id="ano_construcao" name="ano_construcao" placeholder="0" min="1900" step="1" inputmode="numeric" data-simulate-field><label for="ano_construcao">Ano construção</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><select class="form-select wizard-select" id="material_casco" name="material_casco" data-simulate-field><option value="">Selecione</option>{% for value, label in material_casco_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select><label for="material_casco">Material casco</label></div></div>
+            <div class="col-md-4"><div class="form-floating"><input type="text" class="form-control wizard-input" id="tipo_embarcacao" name="tipo_embarcacao" placeholder="Bote, barco, canoa..." data-simulate-field><label for="tipo_embarcacao">Tipo embarcação</label></div></div>
+
+            <div class="col-12">
+              <div class="wizard-block-label">Tipo propulsão</div>
+              <div class="wizard-checkbox-grid two-columns">
+                {% for value, label in propulsao_options %}
+                  <label class="wizard-check-card" for="tipo_propulsao_{{ loop.index0 }}"><input id="tipo_propulsao_{{ loop.index0 }}" class="form-check-input" type="checkbox" name="tipo_propulsao[]" value="{{ value }}"><span>{{ label }}</span></label>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="6">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">7. Despesas da Atividade</div>
+              <h2 class="section-title mb-2">Tabela dinâmica de gastos</h2>
+              <p class="text-secondary mb-0">Adicione e remova linhas sem bloquear navegação ou submissão.</p>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" data-add-expense>
+              <i class="bi bi-plus-lg me-1"></i>Adicionar Despesa
+            </button>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="table-responsive wizard-table-wrap mt-3">
+            <table class="table align-middle wizard-table">
+              <thead>
+                <tr>
+                  <th>Item despesa</th>
+                  <th>Tipo</th>
+                  <th>Quantidade</th>
+                  <th>Unidade</th>
+                  <th>Custo reais</th>
+                  <th>Outros</th>
+                  <th>Frequência</th>
+                  <th class="text-end">Ação</th>
+                </tr>
+              </thead>
+              <tbody data-expenses-body>
+                <tr data-row-template="expense">
+                  <td><input type="text" class="form-control form-control-sm" name="despesas_atividade[0][item_despesa]" placeholder="Ex.: combustível" data-field="item_despesa"></td>
+                  <td><input type="text" class="form-control form-control-sm" name="despesas_atividade[0][tipo]" placeholder="Tipo" data-field="tipo"></td>
+                  <td><input type="number" class="form-control form-control-sm" name="despesas_atividade[0][quantidade]" placeholder="0" min="0" step="0.1" data-field="quantidade"></td>
+                  <td><input type="text" class="form-control form-control-sm" name="despesas_atividade[0][unidade]" placeholder="kg, litro..." data-field="unidade"></td>
+                  <td><input type="number" class="form-control form-control-sm" name="despesas_atividade[0][custo_reais]" placeholder="0,00" min="0" step="0.01" data-field="custo_reais"></td>
+                  <td><input type="text" class="form-control form-control-sm" name="despesas_atividade[0][outros]" placeholder="Observações" data-field="outros"></td>
+                  <td><select class="form-select form-select-sm" name="despesas_atividade[0][frequencia]" data-field="frequencia"><option value="">Selecione</option>{% for value, label in frequencia_options %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></td>
+                  <td class="text-end"><button type="button" class="btn btn-outline-danger btn-sm" data-remove-row><i class="bi bi-trash3"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="7">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">8. Pescados / Safra</div>
+              <h2 class="section-title mb-2">Tabela dinâmica de safras</h2>
+              <p class="text-secondary mb-0">Registre peixes ou espécies com início e fim de safra em múltiplas linhas.</p>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" data-add-fish>
+              <i class="bi bi-plus-lg me-1"></i>Adicionar Pescado
+            </button>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="table-responsive wizard-table-wrap mt-3">
+            <table class="table align-middle wizard-table">
+              <thead>
+                <tr>
+                  <th>Nome comum</th>
+                  <th>Início safra</th>
+                  <th>Fim safra</th>
+                  <th class="text-end">Ação</th>
+                </tr>
+              </thead>
+              <tbody data-fish-body>
+                <tr data-row-template="fish">
+                  <td><input type="text" class="form-control form-control-sm" name="pescados_safra[0][nome_comum]" placeholder="Ex.: tainha" data-field="nome_comum"></td>
+                  <td><input type="text" class="form-control form-control-sm" name="pescados_safra[0][inicio_safra]" placeholder="Jan" data-field="inicio_safra"></td>
+                  <td><input type="text" class="form-control form-control-sm" name="pescados_safra[0][fim_safra]" placeholder="Mar" data-field="fim_safra"></td>
+                  <td class="text-end"><button type="button" class="btn btn-outline-danger btn-sm" data-remove-row><i class="bi bi-trash3"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="wizard-step-pane" data-step-pane data-step-index="8">
+        <div class="wizard-card page-card p-4 p-lg-5">
+          <div class="wizard-card-head mb-4">
+            <div>
+              <div class="section-kicker">9. Revisão Final</div>
+              <h2 class="section-title mb-2">Resumo visual antes da futura integração</h2>
+              <p class="text-secondary mb-0">Confira os blocos abaixo e finalize para abrir apenas o modal de confirmação.</p>
+            </div>
+            <span class="wizard-step-badge">Etapa 09</span>
+          </div>
+
+          <div class="wizard-validation-hint">
+            <i class="bi bi-info-circle"></i>
+            Validação real será implementada futuramente no backend.
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-lg-6"><div class="review-card"><div class="small text-secondary">Coleta</div><div class="review-value" id="summaryColeta">--</div><div class="review-copy" id="summaryColetaExtra">--</div></div></div>
+            <div class="col-lg-6"><div class="review-card"><div class="small text-secondary">Pescador</div><div class="review-value" id="summaryPessoa">--</div><div class="review-copy" id="summaryPessoaExtra">--</div></div></div>
+            <div class="col-lg-6"><div class="review-card"><div class="small text-secondary">Saúde e registros</div><div class="review-value" id="summarySaude">--</div><div class="review-copy" id="summarySaudeExtra">--</div></div></div>
+            <div class="col-lg-6"><div class="review-card"><div class="small text-secondary">Atividade e produção</div><div class="review-value" id="summaryAtividade">--</div><div class="review-copy" id="summaryAtividadeExtra">--</div></div></div>
+            <div class="col-lg-6"><div class="review-card"><div class="small text-secondary">Embarcação</div><div class="review-value" id="summaryEmbarcacao">--</div><div class="review-copy" id="summaryEmbarcacaoExtra">--</div></div></div>
+            <div class="col-lg-6"><div class="review-card"><div class="small text-secondary">Tabelas dinâmicas</div><div class="review-value" id="summaryTabelas">--</div><div class="review-copy" id="summaryTabelasExtra">--</div></div></div>
+            <div class="col-12"><div class="review-card"><div class="small text-secondary">Seleções múltiplas</div><div class="review-chip-wrap" id="summaryChips"></div></div></div>
+          </div>
+
+          <div class="wizard-finish-callout mt-4">
+            <div>
+              <div class="fw-semibold">Integração backend ainda não está conectada.</div>
+              <div class="text-secondary">Ao finalizar, apenas um modal Bootstrap será exibido para confirmar a validação visual.</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg" data-wizard-finish>
+              <i class="bi bi-check2-circle me-1"></i>Finalizar
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="wizard-footer page-card p-3 p-lg-4 mt-4">
+      <div class="d-flex flex-column flex-sm-row gap-2 align-items-sm-center justify-content-between">
+        <div class="text-secondary small" data-wizard-help>Use os botões para navegar entre as etapas.</div>
+        <div class="d-flex gap-2 justify-content-end ms-sm-auto">
+          <button type="button" class="btn btn-outline-secondary" data-wizard-prev><i class="bi bi-arrow-left me-1"></i>Voltar</button>
+          <button type="button" class="btn btn-primary" data-wizard-next>Avançar<i class="bi bi-arrow-right ms-1"></i></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal fade" id="wizardReviewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title">Validação visual concluída</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2">Formulário validado visualmente com sucesso.</p>
+        <p class="text-secondary mb-0">Integração backend será implementada futuramente.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{{ url_for('static', filename='js/wizard.js') }}"></script>
+{% endblock %}

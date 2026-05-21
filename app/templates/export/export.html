@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% from "components/macros.html" import page_header, result_tile %}
+
+{% block title %}Exportar dados | Form Pescador{% endblock %}
+
+{% block content %}
+<div class="row g-4 align-items-start">
+  <div class="col-lg-3">
+    {% include "components/sidebar.html" with context %}
+  </div>
+
+  <div class="col-lg-9">
+    <section class="page-card p-4 p-md-5">
+      {{ page_header('Exportação para Excel', 'Exportar dados do SQLite', 'Aplique filtros e gere automaticamente o arquivo .xlsx para download.', 'Voltar', url_for('main.home'), 'bi-arrow-left') }}
+
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="card card-soft border-0 h-100">
+            <div class="card-body p-4 p-md-5">
+              <h2 class="section-title mb-3">Filtros da exportação</h2>
+
+              <form method="post" class="row g-3">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="municipio">Município</label>
+                  <input class="form-control form-control-lg" id="municipio" name="municipio" value="{{ filters.municipio }}" placeholder="Filtrar por município">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="localidade">Localidade</label>
+                  <input class="form-control form-control-lg" id="localidade" name="localidade" value="{{ filters.localidade }}" placeholder="Filtrar por localidade">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold" for="sexo">Sexo</label>
+                  <select class="form-select form-select-lg" id="sexo" name="sexo">
+                    <option value="todos" {% if filters.sexo in ['', 'todos'] %}selected{% endif %}>Todos</option>
+                    <option value="feminino" {% if filters.sexo == 'feminino' %}selected{% endif %}>Feminino</option>
+                    <option value="masculino" {% if filters.sexo == 'masculino' %}selected{% endif %}>Masculino</option>
+                    <option value="outro" {% if filters.sexo == 'outro' %}selected{% endif %}>Outro</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label fw-semibold" for="data_inicio">Período inicial</label>
+                  <input type="date" class="form-control form-control-lg" id="data_inicio" name="data_inicio" value="{{ filters.data_inicio }}">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label fw-semibold" for="data_fim">Período final</label>
+                  <input type="date" class="form-control form-control-lg" id="data_fim" name="data_fim" value="{{ filters.data_fim }}">
+                </div>
+
+                <div class="col-12 d-flex flex-column flex-md-row gap-3 justify-content-between pt-2">
+                  <div class="text-secondary small align-self-md-center">
+                    A exportação usa DataFrame e openpyxl para geração do arquivo.
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-lg px-5">Exportar Excel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card card-soft border-0 h-100">
+            <div class="card-body p-4 p-md-5">
+              <h2 class="section-title mb-3">Resumo</h2>
+              <div class="d-grid gap-3">
+                {{ result_tile('Registros encontrados', records_count) }}
+              </div>
+              <div class="alert alert-light border mt-3 mb-0 text-secondary">
+                O arquivo é gerado automaticamente e o download começa logo após a exportação.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

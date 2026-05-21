@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "components/macros.html" import page_header %}
+
+{% block title %}{{ title }} | Form Pescador{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-xl-7">
+    <section class="page-card p-4 p-md-5 text-center">
+      {{ page_header('Erro', title, message) }}
+      <p class="text-secondary mb-4">{{ message }}</p>
+      <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-lg">
+        Voltar para a home
+      </a>
+    </section>
+  </div>
+</div>
+{% endblock %}

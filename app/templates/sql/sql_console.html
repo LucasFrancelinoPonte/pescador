@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% from "components/macros.html" import page_header, result_tile %}
+
+{% block title %}SQL Console | Form Pescador{% endblock %}
+
+{% block content %}
+<div class="row g-4 align-items-start">
+  <div class="col-lg-3">
+    {% include "components/sidebar.html" with context %}
+  </div>
+
+  <div class="col-lg-9">
+    <section class="page-card p-4 p-md-5">
+      {{ page_header('SQL Console', 'Consultas SQL customizadas', 'Apenas instruções SELECT são aceitas. Os resultados podem ser exportados para Excel.', 'Voltar', url_for('main.home'), 'bi-arrow-left') }}
+
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="card card-soft border-0 h-100">
+            <div class="card-body p-4 p-md-5">
+              <h2 class="section-title mb-3">Editor SQL</h2>
+              <form method="post" class="vstack gap-3">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div>
+                  <label for="sql_query" class="form-label fw-semibold">Consulta SQL</label>
+                  <textarea id="sql_query" name="sql_query" class="form-control font-monospace sql-textarea" rows="14" placeholder="Digite uma consulta SELECT...">{{ query }}</textarea>
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+                  <button type="submit" name="action" value="run" class="btn btn-primary btn-lg">Executar consulta</button>
+                  <button type="submit" name="action" value="export" class="btn btn-outline-primary btn-lg">Exportar resultado</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="card card-soft border-0 mb-4">
+            <div class="card-body p-4 p-md-5">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+                <h2 class="section-title mb-0">Exemplos de consultas úteis</h2>
+                <span class="badge text-bg-light text-secondary border">SQLite</span>
+              </div>
+              <div class="row g-3">
+                {% for example in examples %}
+                  <div class="col-12">
+                    <div class="example-query" role="button" data-query="{{ example }}">
+                      <i class="bi bi-terminal me-2 text-primary"></i>{{ example }}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-soft border-0">
+            <div class="card-body p-4 p-md-5">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+                <h2 class="section-title mb-0">Resultado</h2>
+                {{ result_tile('Linhas retornadas', row_count) }}
+              </div>
+
+              {% if dataframe_html %}
+                <div class="table-responsive sql-table-wrap">
+                  {{ dataframe_html | safe }}
+                </div>
+              {% else %}
+                <div class="alert alert-light border mb-0 text-secondary">
+                  Execute uma consulta para visualizar os resultados aqui.
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

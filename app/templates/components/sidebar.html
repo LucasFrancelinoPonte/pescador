@@ -1,0 +1,46 @@
+<aside class="sidebar-panel p-3 p-md-4">
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <div class="avatar-shell">
+      <i class="bi bi-person-check-fill"></i>
+    </div>
+    <div>
+      <div class="small text-secondary">Usuário logado</div>
+      <div class="fw-semibold">{{ current_user.name }}</div>
+      <div class="small text-secondary">Perfil: {{ current_user.perfil }}</div>
+    </div>
+  </div>
+
+  <div class="sidebar-title mb-3">Menu</div>
+  <div class="nav flex-column gap-2">
+    <a class="sidebar-link {% if active_page == 'home' %}active{% endif %}" href="{{ url_for('main.home') }}">
+      <i class="bi bi-house me-2"></i>Home
+    </a>
+    <a class="sidebar-link {% if active_page == 'form' %}active{% endif %}" href="{{ url_for('form_bp.new_form') }}">
+      <i class="bi bi-journal-plus me-2"></i>Novo formulário
+    </a>
+    <a class="sidebar-link {% if active_page == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard_bp.dashboard') }}">
+      <i class="bi bi-speedometer2 me-2"></i>Dashboard
+    </a>
+    <a class="sidebar-link {% if active_page == 'export' %}active{% endif %}" href="{{ url_for('export_bp.export_data') }}">
+      <i class="bi bi-file-earmark-arrow-down me-2"></i>Exportar
+    </a>
+    <a class="sidebar-link {% if active_page == 'import' %}active{% endif %}" href="{{ url_for('import_bp.upload') }}">
+      <i class="bi bi-upload me-2"></i>Importar
+    </a>
+    <a class="sidebar-link {% if active_page == 'sql' %}active{% endif %}" href="{{ url_for('sql_bp.sql_console') }}">
+      <i class="bi bi-terminal me-2"></i>SQL Console
+    </a>
+  </div>
+
+  <div class="sidebar-note mt-4">
+    <div class="small text-secondary mb-2">Acesso rápido</div>
+    <div class="d-grid gap-2">
+      <a class="btn btn-primary" href="{{ url_for('form_bp.new_form') }}">
+        <i class="bi bi-plus-circle me-2"></i>Novo registro
+      </a>
+      <a class="btn btn-outline-primary" href="{{ url_for('dashboard_bp.dashboard') }}">
+        <i class="bi bi-graph-up me-2"></i>Ver dashboard
+      </a>
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Página não encontrada | Form Pescador{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-9 col-lg-7">
+    <section class="page-card p-4 p-md-5 text-center">
+      <div class="section-kicker mb-2">Erro 404</div>
+      <h1 class="page-title mb-3">Página não encontrada</h1>
+      <p class="text-secondary mb-4">A rota solicitada não existe ou foi movida.</p>
+      <a href="{{ url_for('main.home') }}" class="btn btn-primary">Voltar para a home</a>
+    </section>
+  </div>
+</div>
+{% endblock %}

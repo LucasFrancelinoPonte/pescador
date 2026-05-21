@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | Form Pescador{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-9 col-lg-7">
+    <section class="page-card p-4 p-md-5">
+      <div class="section-kicker mb-2">Temporariamente desativado</div>
+      <h1 class="page-title mb-3">{{ title }}</h1>
+      <p class="text-secondary mb-4">{{ message }}</p>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{{ url_for('main.home') }}" class="btn btn-outline-secondary">Voltar</a>
+        <a href="{{ url_for('form_bp.new_form') }}" class="btn btn-primary">Abrir formulário</a>
+      </div>
+      <!-- Área reservada para reativação futura dos módulos auxiliares. -->
+    </section>
+  </div>
+</div>
+{% endblock %}
